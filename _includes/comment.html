@@ -1,0 +1,37 @@
+<br/>
+<div>
+  <div class="text-center"><a class="blog-post-comment-button btn btn-primary" href="https://github.com/hainam125/hainam125.github.io/issues/{{ githubIssueId }}#new_comment_field" target="_blank">Visit GitHub to add a comment</a></div>
+  <br/>
+  <div class="blog-post-comments list-group"></div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+  const apiUrl = 'https://api.github.com/repos/hainam125/hainam125.github.io/issues/{{ githubIssueId }}/comments'
+
+	$(function() { 
+  $.ajax(apiUrl, {
+    headers: {
+        Accept: 'application/vnd.github.v3.html+json'
+    },
+    dataType: 'json',
+    success: function(comments) {
+      const $commentSection = $('.blog-post-comments')
+      comments.forEach(function (comment) {
+        $commentSection.append(
+          `
+          <div class="comment list-group-item">
+            <a class="commenter" href="${comment.user.html_url}" 
+              target="_blank">${comment.user.login}</a>, 
+              ${new Date(comment.created_at).toUTCString()}
+            <p>
+              ${comment.body_html}
+            </p>
+          </div>
+          `
+        )
+      })
+    }
+  })
+})
+</script>
